@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .active{
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <script>
+
+        // 1、需求：根据下列数组创建一个表格,并找出每一了最大数字，做出标记，最好试着用面向对象和链式编程完成
+        var arrayStr=[
+			[1,2,33,5],      
+			[2,10,15,16],    
+			[3,1,21,20]   
+		];
+        function Table(arr){
+            this.arr = arr;
+            this.tableHtml="";
+        }
+        // 数组比较
+        Table.prototype.sort = function(){
+            var arr = this.arr
+            for(var i = 0;i<arr[0].length; i++){
+                var max = -Infinity;
+                var arrIndex = 0;
+                for(var j = 0; j < arr.length; j++){
+                    if(arr[j][i]>max){
+                        max = arr[j][i];
+                        arrIndex = j;
+                    }
+                }
+                arr[arrIndex].splice(i,1,{max:true,value:max});
+            }
+            return this;
+        }
+        // 创建表格
+        Table.prototype.createTable = function(){
+            var arr = this.arr;
+            var str = "<table border='1'>";
+            for(var i = 0;i < arr.length; i++){
+                str+="<tr>"
+                for(var j = 0; j< arr[i].length; j++){
+                    str+= arr[i][j].max?("<td class='active'>"+arr[i][j].value+"</td>"):("<td>"+arr[i][j]+"</td>")
+                }
+                str+="</tr>"
+            }
+            str+="</table>";
+
+            this.tableHtml = str;
+            return this;
+        }
+
+        var html = new Table(arrayStr).sort().createTable().tableHtml;
+        document.body.innerHTML = html;
+
+        
+       
+
+
+        // 2、需求：有30个小孩儿，编号从1-30，围成一个圈依次报数，1，2，3数到3的小孩儿退出这个圈，
+        // 然后下一个小孩重新报数  1、2、3，问最后剩下的那个小孩儿的编号是多少；
+
+
+
+        
+        function getLast(){
+            var arr = [];
+            for(var i = 1; i<= 30; i++){
+                arr.push(i);
+            }
+            // var arr = Array.from({length:30},(v,i)=>i+1)
+            // var arr = Array.from({length:30},function(value,index){
+            //     return index +1;
+            // });
+            var flag = 1;
+            while(arr.length>1){
+                for(var i = 0; i< arr.length; i++){
+                    flag++;
+                    if(flag == 3){
+                        flag=1;
+                        arr.splice(i,1);
+                        i--;
+                    }
+                }
+            }
+            return arr[ 0 ];
+        }
+
+       console.log(getLast())
+
+        
+
+    </script>
+</body>
+</html>
